@@ -35,32 +35,21 @@ This is a tool to extract IP addresses from an Lastline Enterprise exported even
 optional arguments:
 
 
--h, --help
+-h, --help show this help message and exit
 
-show this help message and exit
+-o OUT_FILE, --output_file OUT_FILE List of extracted bad remote IP addresses, default to "block_ip.txt"
 
--o OUT_FILE, --output_file OUT_FILE
+-wl WHITELIST_FILE, --whitelist_file WHITELIST_FILE If you want to whitelist certain bad remote IP, put them into a file and point the script to read. This file default to "whitelist.txt"
 
-List of extracted bad remote IP addresses, default to "block_ip.txt"
+-u USERNAME, --username USERNAME Please enter your Lastline portal username.
 
--wl WHITELIST_FILE, --whitelist_file WHITELIST_FILE
+-p, --password Please enter your Lastline portal password.
 
-If you want to whitelist certain bad remote IP, put them into a file and point the script to read. This file default to "whitelist.txt"
+-host LASTLINE_HOST, --lastline_host LASTLINE_HOST Lastline Manager host(IP/FQDN). Default to "user.lastline.com.
 
--u USERNAME, --username USERNAME 
-Please enter your Lastline portal username.
+-k KEY_ID, --key-id KEY_ID License key id. Please check it in Manager web portal in exported event url.
 
--p, --password
-Please enter your Lastline portal password.
-
--host LASTLINE_HOST, --lastline_host LASTLINE_HOST
-Lastline Manager host(IP/FQDN). Default to "user.lastline.com.
-
--k KEY_ID, --key-id KEY_ID
-License key id. Please check it in Manager web portal in exported event url.
-
--sk SUBKEY_ID, --sub-key-id SUBKEY_ID
-Sensor sub key id. Please check it in Manager web portal in exported event url.
+-sk SUBKEY_ID, --sub-key-id SUBKEY_ID Sensor sub key id. Please check it in Manager web portal in exported event url.
 
 Use it at your own risk!
 
