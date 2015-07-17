@@ -31,27 +31,49 @@ $> python get_events.py -h
 usage: get_events.py [-h] [-o OUT_FILE] [-wl WHITELIST_FILE] -u USERNAME -p [-host LASTLINE_HOST] -k KEY_ID [-sk SUBKEY_ID]
 
 This is a tool to extract IP addresses from an Lastline Enterprise exported event file in JSON format.
+
 optional arguments:
-  -h, --help            show this help message and exit
-  -o OUT_FILE, --output_file OUT_FILE
-                        List of extracted bad remote IP addresses, default to
-                        "block_ip.txt"
-  -wl WHITELIST_FILE, --whitelist_file WHITELIST_FILE
-                        If you want to whitelist certain bad remote IP, put
-                        them into a file and point the script to read. This
-                        file default to "whitelist.txt"
-  -u USERNAME, --username USERNAME
-                        Please enter your Lastline portal username.
-  -p, --password        Please enter your Lastline portal password.
-  -host LASTLINE_HOST, --lastline_host LASTLINE_HOST
-                        Lastline Manager host(IP/FQDN). Default to
-                        "user.lastline.com.
-  -k KEY_ID, --key-id KEY_ID
-                        License key id. Please check it in Manager web portal
-                        in exported event url.
-  -sk SUBKEY_ID, --sub-key-id SUBKEY_ID
-                        Sensor sub key id. Please check it in Manager web
-                        portal in exported event url.
+
+
+-h, --help            show this help message and exit
+
+-o OUT_FILE, --output_file OUT_FILE
+
+                      List of extracted bad remote IP addresses, default to
+
+                      "block_ip.txt"
+
+-wl WHITELIST_FILE, --whitelist_file WHITELIST_FILE
+
+                      If you want to whitelist certain bad remote IP, put
+
+                      them into a file and point the script to read. This
+
+                      file default to "whitelist.txt"
+
+-u USERNAME, --username USERNAME
+
+                      Please enter your Lastline portal username.
+
+-p, --password        Please enter your Lastline portal password.
+
+-host LASTLINE_HOST, --lastline_host LASTLINE_HOST
+
+                      Lastline Manager host(IP/FQDN). Default to
+
+                      "user.lastline.com.
+
+-k KEY_ID, --key-id KEY_ID
+
+                      License key id. Please check it in Manager web portal
+
+                      in exported event url.
+
+-sk SUBKEY_ID, --sub-key-id SUBKEY_ID
+
+                      Sensor sub key id. Please check it in Manager web
+
+                      portal in exported event url.
 
 Use it at your own risk!
 
