@@ -18,7 +18,8 @@ $> python get_events.py -host user.lastline.com -u abc@abc.com -p -k 123456789
 
 Password: 
 
-$> cat block_ip.txt 
+$> cat block_ip.txt
+
 156.154.103.3
 202.46.190.131
 178.19.108.142
@@ -26,12 +27,10 @@ $> cat block_ip.txt
 For more information about what inline arguments, please use -h to find out:
 
 $> python get_events.py -h
-usage: get_events.py [-h] [-o OUT_FILE] [-wl WHITELIST_FILE] -u USERNAME -p
-                     [-host LASTLINE_HOST] -k KEY_ID [-sk SUBKEY_ID]
 
-This is a tool to extract IP addresses from an Lastline Enterprise exported
-event file in JSON format.
+usage: get_events.py [-h] [-o OUT_FILE] [-wl WHITELIST_FILE] -u USERNAME -p [-host LASTLINE_HOST] -k KEY_ID [-sk SUBKEY_ID]
 
+This is a tool to extract IP addresses from an Lastline Enterprise exported event file in JSON format.
 optional arguments:
   -h, --help            show this help message and exit
   -o OUT_FILE, --output_file OUT_FILE
