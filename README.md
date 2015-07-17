@@ -15,7 +15,9 @@ This one takes inline arguments so you can do the job by running it once.
 Example usage:
 
 $> python get_events.py -host user.lastline.com -u abc@abc.com -p -k 123456789
+
 Password: 
+
 $> cat block_ip.txt 
 156.154.103.3
 202.46.190.131
