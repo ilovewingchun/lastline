@@ -35,7 +35,8 @@ This is a tool to extract IP addresses from an Lastline Enterprise exported even
 optional arguments:
 
 
--h, --help            show this help message and exit
+-h, --help
+	show this help message and exit
 
 -o OUT_FILE, --output_file OUT_FILE
 
