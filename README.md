@@ -6,9 +6,10 @@ This is a Python script that will help you to:
 
 By using this script, you will be able to automatically complete the above mentioned workflow. You can then publish that bad IP list and let products such as PaloAlto NGFW or Bluecoat ProxySG to come and get the list. So those inlince security devices and import and do blocking automatically.
 
-There are two version of this script:
 
-1. get_events.py
+There are two version of this script.
+
+get_events.py:
 
 This one takes inline arguments so you can do the job by running it once.
 
@@ -53,7 +54,7 @@ optional arguments:
 
 Use it at your own risk!
 
-2. get_events_script.py
+get_events_script.py
 
 This one hard codes all core Lastline values so you can use a crontab to automatically run it in the background without user intervention. 
 
