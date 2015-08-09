@@ -1,11 +1,14 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
+#####
+# Core Lastline values
 # Please input all the core Lastline values over here:
 lastline_host = "user.lastline.com" # Your on-premise IP/FQDN.
-key_id = "1234567" # Lastline license key id.
-subkey_id = "" # Lastline Sensor subkey id. Leave it blank if you do not want to filter event based on certain Sensor.
-llusername = "your@username" # Lastline web portal username in email format.
-llpassword = "mypassword" # Lastline web portal password.
+key_id = "" # Lastline license key id. (E.g., 123456789)
+subkey_id = "" # Lastline Sensor subkey id. Leave it blank if you do not want to filter event based on certain Sensor. (E.g., 1234567890)
+llusername = "" # Lastline web portal username in email format. (E.g., your@username)
+llpassword = "" # Lastline web portal password. (E.g., mypassword)
+#####
 ##### Starting our codes #####
 from datetime import datetime, timedelta
 try:
@@ -26,40 +29,12 @@ try:
 except ImportError:
     print "Please install the argparse python module\non Debian systems you can use:\napt-get install python-argparse"
     sys.exit()
-#http://stackoverflow.com/questions/27921629/python-using-getpass-with-argparse
-class PasswordPromptAction(argparse.Action):
-    def __init__(self,
-             option_strings,
-             dest=None,
-             nargs=0,
-             default=None,
-             required=False,
-             type=None,
-             metavar=None,
-             help=None):
-        super(PasswordPromptAction, self).__init__(
-             option_strings=option_strings,
-             dest=dest,
-             nargs=nargs,
-             default=default,
-             required=required,
-             metavar=metavar,
-             type=type,
-             help=help)
 
-    def __call__(self, parser, args, values, option_string=None):
-        password = getpass.getpass()
-        setattr(args, self.dest, password)
 parser = argparse.ArgumentParser(
                                  description = "This is a tool to extract IP addresses from an Lastline Enterprise exported event file in JSON format.",     # text displayed on top of --help
                                  epilog = 'Use it at your own risk!') # last text displayed
 parser.add_argument('-o','--output_file',action="store",default='block_ip.txt',dest='out_file',help='List of extracted bad remote IP addresses, default to "block_ip.txt"')
 parser.add_argument('-wl','--whitelist_file',action="store",default='whitelist.txt',dest='whitelist_file',help='If you want to whitelist certain bad remote IP, put them into a file and point the script to read. This file default to "whitelist.txt"')
-#parser.add_argument('-u','--username',dest='username', type=str, required=True, help='Please enter your Lastline portal username.')
-#parser.add_argument('-p','--password',dest='password', action=PasswordPromptAction, type=str, required=True, help='Please enter your Lastline portal password.')
-#parser.add_argument('-host','--lastline_host',action="store",default='user.lastline.com',dest='lastline_host',help='Lastline Manager host(IP/FQDN). Default to "user.lastline.com.' )
-#parser.add_argument('-k','--key-id',action="store",type=str, required=True, dest='key_id',help='License key id. Please check it in Manager web portal in exported event url.' )
-#parser.add_argument('-sk','--sub-key-id',action="store",type=str, dest='subkey_id',help='Sensor sub key id. Please check it in Manager web portal in exported event url.' )
 
 arguments = parser.parse_args()
 timenow = datetime.today()
@@ -75,6 +50,7 @@ params_get_events = {'func' : 'events', 'start_datetime':last7DaysDateTime.strft
 if subkey_id:
     params_get_events['subkey_id'] = subkey_id
 string_params = ''.join(['%s=%s&' % (k,v) for k,v in params_get_events.iteritems()])
+# Trying to authenticate itself.
 req_auth = requests.post(lastline_url, data = post_data_auth)
 req_get_events = requests.get(lastline_url, params = str(string_params), cookies = req_auth.cookies)
 # look at dest in the parser.add_argument lines
@@ -86,7 +62,7 @@ data = json.loads(req_get_events.content) # Load json file and change it to dict
 try:
     a = data["data"] # Retrieve value for key called "data" inside variable data, store in a, this is a list.
 except KeyError:
-    print "[-] Error! No data available!\nPlease input the correct core Lastline values in the beginning of this script!"
+    print "[-] Error! No data available!\nPlease make sure you have put correct core Lastline values in the beginning of this script!"
     sys.exit()
 fo = open(out_file, 'w') # Open a file to store our parsed result.
 c = []  # Empty list
