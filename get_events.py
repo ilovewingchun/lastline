@@ -53,6 +53,7 @@ parser.add_argument('-p','--password',dest='password', action=PasswordPromptActi
 parser.add_argument('-host','--lastline_host',action="store",default='user.lastline.com',dest='lastline_host',help='Lastline Manager host(IP/FQDN). Default to "user.lastline.com.' )
 parser.add_argument('-k','--key-id',action="store",type=str, required=True, dest='key_id',help='License key id. Please check it in Manager web portal in exported event url.' )
 parser.add_argument('-sk','--sub-key-id',action="store",type=str, dest='subkey_id',help='Sensor sub key id. Please check it in Manager web portal in exported event url.' )
+parser.add_argument('-t','--timerange',dest='days_ago', type=int, default='7' ,help='Time Range. Enter how many days ago you want to search for. Default to 7 days ago from now on.\nIf you would like to search in hours, you will need to modify this script')
 
 arguments = parser.parse_args()
 timenow = datetime.today()
@@ -61,6 +62,7 @@ last8HourDateTime = datetime.today() - timedelta(hours = 8)
 last24HourDateTime = datetime.today() - timedelta(hours = 24)
 last7DaysDateTime = datetime.today() - timedelta(days = 7)
 last31DaysDateTime = datetime.today() - timedelta(days = 31)
+lastNDaysDateTime = datetime.today() - timedelta(days = arguments.days_ago)
 
 lastline_host = arguments.lastline_host
 key_id = arguments.key_id
@@ -70,7 +72,7 @@ llpassword = arguments.password
 
 lastline_url = "https://%s/ll_api/ll_api.php" % lastline_host
 post_data_auth = {'func' : 'is_authenticated', 'username':llusername, 'password':llpassword}
-params_get_events = {'func' : 'events', 'start_datetime':last7DaysDateTime.strftime('%Y-%m-%d+%H:%M:%S'), 'end_datetime':timenow.strftime('%Y-%m-%d+%H:%M:%S'), 'key_id':key_id, 'priority':'Infections', 'threat_class':'command%26control','time_zone':'Asia/Taipei', 'whitelisting':'true', 'show_false_positives':'false', 'format':'json'}
+params_get_events = {'func' : 'events', 'start_datetime':lastNDaysDateTime.strftime('%Y-%m-%d+%H:%M:%S'), 'end_datetime':timenow.strftime('%Y-%m-%d+%H:%M:%S'), 'key_id':key_id, 'priority':'Infections', 'threat_class':'command%26control','time_zone':'Asia/Taipei', 'whitelisting':'true', 'show_false_positives':'false', 'format':'json'}
 if subkey_id:
 	params_get_events['subkey_id'] = subkey_id
 string_params = ''.join(['%s=%s&' % (k,v) for k,v in params_get_events.iteritems()])
@@ -85,7 +87,11 @@ data = json.loads(req_get_events.content) # Load json file and change it to dict
 try:
     a = data["data"] # Retrieve value for key called "data" inside variable data, store in a, this is a list.
 except KeyError:
-    print "[-] Error! No data available!\nPlease input the correct core Lastline values in the beginning of this script!"
+    print "[-] Error! Cannot get data!\nPlease check your parameters such as username and password!"
+    sys.exit()
+if not len(a) > 0:
+    print "[-] Error! There is no data!"
+    print "[-] Hint: Use WEB UI, go to Events, set filter to both 'Priority=Infections' and 'Class=Command&Controls', see if there is anything there."
     sys.exit()
 fo = open(out_file, 'w') # Open a file to store our parsed result.
 c = []  # Empty list

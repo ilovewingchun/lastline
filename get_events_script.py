@@ -8,7 +8,8 @@ key_id = "" # Lastline license key id. (E.g., 123456789)
 subkey_id = "" # Lastline Sensor subkey id. Leave it blank if you do not want to filter event based on certain Sensor. (E.g., 1234567890)
 llusername = "" # Lastline web portal username in email format. (E.g., your@username)
 llpassword = "" # Lastline web portal password. (E.g., mypassword)
-#####
+timerange = "7" # Last N days you want to search for. Normally you will search for past 7 days, so you can put a digit number 7 here.
+
 ##### Starting our codes #####
 from datetime import datetime, timedelta
 try:
@@ -30,6 +31,12 @@ except ImportError:
     print "Please install the argparse python module\non Debian systems you can use:\napt-get install python-argparse"
     sys.exit()
 
+# Check if user has provided enough core Lastline values:
+if not key_id:
+    print "[-] Error! Not enough core Lastline values!"
+    print "[-] Please open this script in your favorite editor and provide the correct core Lastline values."
+    sys.exit()
+
 parser = argparse.ArgumentParser(
                                  description = "This is a tool to extract IP addresses from an Lastline Enterprise exported event file in JSON format.",     # text displayed on top of --help
                                  epilog = 'Use it at your own risk!') # last text displayed
@@ -37,16 +44,18 @@ parser.add_argument('-o','--output_file',action="store",default='block_ip.txt',d
 parser.add_argument('-wl','--whitelist_file',action="store",default='whitelist.txt',dest='whitelist_file',help='If you want to whitelist certain bad remote IP, put them into a file and point the script to read. This file default to "whitelist.txt"')
 
 arguments = parser.parse_args()
+
 timenow = datetime.today()
 last1HourDateTime = datetime.today() - timedelta(hours = 1)
 last8HourDateTime = datetime.today() - timedelta(hours = 8)
 last24HourDateTime = datetime.today() - timedelta(hours = 24)
 last7DaysDateTime = datetime.today() - timedelta(days = 7)
 last31DaysDateTime = datetime.today() - timedelta(days = 31)
+lastNDaysDateTime = datetime.today() - timedelta(days = int(timerange))
 
 lastline_url = "https://%s/ll_api/ll_api.php" % lastline_host
 post_data_auth = {'func' : 'is_authenticated', 'username':llusername, 'password':llpassword}
-params_get_events = {'func' : 'events', 'start_datetime':last7DaysDateTime.strftime('%Y-%m-%d+%H:%M:%S'), 'end_datetime':timenow.strftime('%Y-%m-%d+%H:%M:%S'), 'key_id':key_id, 'priority':'Infections', 'threat_class':'command%26control','time_zone':'Asia/Taipei', 'whitelisting':'true', 'show_false_positives':'false', 'format':'json'}
+params_get_events = {'func' : 'events', 'start_datetime':lastNDaysDateTime.strftime('%Y-%m-%d+%H:%M:%S'), 'end_datetime':timenow.strftime('%Y-%m-%d+%H:%M:%S'), 'key_id':key_id, 'priority':'Infections', 'threat_class':'command%26control','time_zone':'Asia/Taipei', 'whitelisting':'true', 'show_false_positives':'false', 'format':'json'}
 if subkey_id:
     params_get_events['subkey_id'] = subkey_id
 string_params = ''.join(['%s=%s&' % (k,v) for k,v in params_get_events.iteritems()])
@@ -65,6 +74,10 @@ except KeyError:
     print "[-] Error! No data available!\nPlease make sure you have put correct core Lastline values in the beginning of this script!"
     sys.exit()
 fo = open(out_file, 'w') # Open a file to store our parsed result.
+if not len(a) > 0:
+    print "[-] Error! There is no data!"
+    print "[-] Hint: Use WEB UI, go to Events, set filter to both 'Priority=Infections' and 'Class=Command&Controls', see if there is anything there."
+    sys.exit()
 c = []  # Empty list
 for i in range(len(a)): # Iterate over first level list
     b = a[i]["dst_host"] # Iterate retrieve IP value for key "dst_host" inside list a
