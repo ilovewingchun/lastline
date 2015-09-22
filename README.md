@@ -40,8 +40,8 @@ usage: get_events.py [-h] [-o OUT_FILE] [-wl WHITELIST_FILE] -u USERNAME
                      [-host LASTLINE_HOST] -k KEY_ID [-sk SUBKEY_ID]
                      [-t DAYS_AGO] [-m METHOD] [-tz TIMEZONE]
 
-This is a tool to extract IP addresses from an Lastline Enterprise exported
-event file in JSON format.
+This is a tool to extract IP addresses or domain names from an Lastline
+Enterprise exported event file in JSON format.
 
 optional arguments:
   -h, --help            show this help message and exit
