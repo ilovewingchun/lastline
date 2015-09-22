@@ -45,7 +45,7 @@ except ImportError:
 #        setattr(args, self.dest, password)
 
 parser = argparse.ArgumentParser(
-                                 description = "This is a tool to extract IP addresses from an Lastline Enterprise exported event file in JSON format.",     # text displayed on top of --help
+                                 description = "This is a tool to extract IP addresses or domain names from an Lastline Enterprise exported event file in JSON format.",     # text displayed on top of --help
                                  epilog = 'Lastline does not support this script! Use it at your own risk!') # last text displayed
 parser.add_argument('-o','--output_file',action="store",default='block.txt',dest='out_file',help='Optional. List of extracted bad remote IP addresses, default to "block.txt"')
 parser.add_argument('-wl','--whitelist_file',action="store",default='whitelist.txt',dest='whitelist_file',help='Optional. If you want to whitelist certain bad remote IP, put them into a file and point the script to read. This file default to "whitelist.txt"')
