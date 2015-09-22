@@ -1,8 +1,8 @@
-This is a Python script that will help you to:
+This is a Python script that will help you to:<p>
 
-1. Login to Lastline Manager web portal.
-2. Download events that is Command&Control and with infection level priority(red).
-3. Parse that events and extract bad destination IP addresses or Domain names and output to a file(default to block.txt)
+1. Login to Lastline Manager web portal.<p>
+2. Download events that is Command&Control and with infection level priority(red).<p>
+3. Parse that events and extract bad destination IP addresses or Domain names and output to a file(default to block.txt)<p><p>
 
 By using this script, you will be able to automatically complete the above mentioned workflow. You can then publish that bad IP list and let products such as PaloAlto NGFW or Bluecoat ProxySG to come and get the list. So those inlince security devices and import and do blocking automatically.
 
@@ -15,15 +15,23 @@ This one takes inline arguments so you can do the job by running it once.
 
 Example usage:
 
-$> python get_events.py -host user.lastline.com -u abc@abc.com -p -k 123456789
-
+$> python get_events.py -u abc@abc.com -k 123456789
 Password: 
 
-$> cat block_ip.txt
+$> cat block.txt
 
 156.154.103.3
 202.46.190.131
 178.19.108.142
+
+$> python get_events.py -u abc@abc.com -k 123456789 -m domain
+Password: 
+
+$> cat block.txt
+
+bad1.domain.com
+bad2.domain.com
+bad3.domain.com
 
 For more information about what inline arguments, please use -h to find out:
 
