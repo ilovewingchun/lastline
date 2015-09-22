@@ -9,9 +9,9 @@ By using this script, you will be able to automatically complete the above menti
 
 There are two version of this script.
 
-1. get_events.py:
+<b>1. get_events.py:</b>
 
-This one takes inline arguments so you can do the job by running it once.
+This one takes inline arguments so you can do the job by running(testing) it and get results immediately.
 
 Example usage:<p>
 <pre><code>
@@ -79,7 +79,7 @@ optional arguments:
 Lastline does not support this script! Use it at your own risk!
 </pre></code>
 
-2. get_events_script.py
+<b>2. get_events_script.py</b>
 
 This one hard codes all core Lastline values so you can use a crontab to automatically run it in the background without user intervention. 
 
