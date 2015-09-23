@@ -10,7 +10,7 @@ By using this script, you will be able to automatically complete the above menti
 There are two versions of this script:
 #1. get_events.py:
 
-This one takes inline arguments so you can do the job by running(testing) it and get results immediately.
+This one takes inline arguments so you can do the job by running(testing) it and get results right away. Use this for a quick POC.
 
 Example usage:<p>
 <pre><code>
