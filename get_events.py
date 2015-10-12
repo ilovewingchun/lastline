@@ -50,6 +50,7 @@ llusername = arguments.username
 llpassword = getpass.getpass()
 timezone = arguments.timezone
 method = arguments.method
+sslverify = True # Set to False if you have SSL certifiation problems
 
 lastline_url = "https://%s/ll_api/ll_api.php" % lastline_host
 post_data_auth = {'func' : 'is_authenticated', 'username':llusername, 'password':llpassword}
@@ -79,13 +80,13 @@ else:
 
 # Trying to authenticate itself.
 try:
-    req_auth = requests.post(lastline_url, data = post_data_auth)
+    req_auth = requests.post(lastline_url, data = post_data_auth, verify=sslverify)
 except Exception, e:
     print "[-] Error = " +str(e)
     print "[-] Please check your username and password, and Lastline host URL."
     sys.exit()
 try:
-    req_get_events = requests.get(lastline_url, params = str(string_params), cookies = req_auth.cookies)
+    req_get_events = requests.get(lastline_url, params = str(string_params), cookies = req_auth.cookies, verify=sslverify)
 except Exception, e:
     print "[-] Error = " +str(e)
     sys.exit()
