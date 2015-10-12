@@ -1,24 +1,23 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
-# Author: Tyler Chen
-# Contact: alphaone.tw@gmail.com or tyler@lastline.com
-#####
-
-# Core Lastline values
-# Please input all the core Lastline values over here:
+'''
+This script will help you to download events and count top-n values for you.
+It will count top-n destination IP and Domain name and save the results to csv files.
+Please change the following paramaters.
+'''
 print "[+] Initializing..."
 
-lastline_host = "user.lastline.com" # Required. Your on-premise IP/FQDN.
+lastline_host = "" # Required. Your on-premise IP/FQDN.
 key_id = "" # Required. Lastline Sensor licnese key id(not license key). Please click on </> button on WEB GUI to get this id. (E.g., 123456789)
 subkey_id = "" # Optional. Lastline Sensor subkey id. Leave it blank if you do not want to filter event based on certain Sensor. (E.g., 1234567890)
 llusername = "" # Required. Lastline web portal username in email format. (E.g., your@username)
 llpassword = "" # Required. Lastline web portal password. (E.g., mypassword)
 timerange = "7" # Required. Last N days you want to search for. Normally you will search for past 7 days, so you can put a digit number 7 here.
-out_file = "blacklist.txt" # Required. Save results to this file name.
-out_file_ip = "blacklist_dst_ip.txt" # Required. Save results to this file name.
-out_file_domain = "blacklist_dst_domain.txt" # Required. Save results to this file name.
+out_file_ip = "top_n_dst_ip.csv" # Required. Save results to this file name.
+out_file_domain = "top_n_dst_domain.csv" # Required. Save results to this file name.
 whitelist_file = "" # Optional. If you wish the script to NOT save certain results, eg. 8.8.8.8, please put them in this file in new line delimited format.
 timezone = "Asia/Taipei" # Required. Please change it to your local time zone. It has to match with what is on Lastline WEB UI,
+topn = 10
 sslverify = False # Set to False if you have SSL certifiation problems
 
 ##### Starting our codes from here #####
@@ -32,6 +31,7 @@ import json
 import csv
 import sys
 import os
+from collections import Counter
 #import logging
 
 # Check if user has provided enough core Lastline values:
@@ -63,6 +63,7 @@ except Exception, e:
     print "[-] Possible network(or firewall) issues. Please check if you have provided correct Lastline host URL."
     print "[-] Please also check if your host can reach to Lastline host URL."
     sys.exit()
+
 print "[+] Trying to download events."
 try:
     req_get_events = requests.get(lastline_url, params = str(string_params), cookies = req_auth.cookies, verify=sslverify)
@@ -100,64 +101,61 @@ if not len(a) > 0:
     sys.exit()
 
 # Empty list
-c = []  # c is our list for both dst ip and dst domain
 list_dst_ip = []
 list_dst_domain = []
 for i in range(len(a)): # Iterate over first level list
     ip = a[i]["dst_host"] # Iterate retrieve IP value for key "dst_host" inside list a
-    c.append(ip) # Write each IP into our emtpy list c
     list_dst_ip.append(ip)
     if whitelist_file:
-        c = [x for x in c if x not in wl] # Remove those entries that are inside whitelist.
         list_dst_ip = [x for x in list_dst_ip if x not in wl]
-        c = list(set(c)) # Retrieve each elements inside list c, using set function to remove duplicate entries and store in c.
-        list_dst_ip = list(set(list_dst_ip))
-    else:
-        c = list(set(c)) # Retrieve each elements inside list c, using set function to remove duplicate entries and store in c.
-        list_dst_ip = list(set(list_dst_ip))
     hostname = a[i]["hostname"] # Iterate retrieve IP value for key "dst_host" inside list a
-    c.append(hostname) # Write each IP into our emtpy list c
     list_dst_domain.append(hostname)
     if whitelist_file:
-        c = [x for x in c if x not in wl] # Remove those entries that are inside whitelist.
         list_dst_domain = [x for x in list_dst_domain if x not in wl]
-        c = list(set(c)) # Retrieve each elements inside list c, using set function to remove duplicate entries and store in c.
-        list_dst_domain = list(set(list_dst_domain))
-    else:
-        c = list(set(c)) # Retrieve each elements inside list c, using set function to remove duplicate entries and store in c.
-        list_dst_domain = list(set(list_dst_domain))
-# Remove empty strings
-c = filter(len,c)
-list_dst_ip = filter(len,list_dst_ip)
-list_dst_domain = filter(len,list_dst_domain)
 
-# Sorting
-c.sort()
-list_dst_ip.sort()
-list_dst_domain.sort()
 
 print "[+] Successfully extracted IP/Domain."
-print "[+] Now writing IP/Domain to our file '%s'." %(out_file)
-fo = open(out_file, 'w') # Open a file to store our parsed result.
-for item in range(len(c)): # Iterate over our list c.
-    e = c[item] # Store each elements inside a new variable e
-    w = csv.writer(fo, lineterminator="\n") # Using csv function to write each value to a newly definied variable w, which actually writes to previously opened file fo.
-    w.writerow([e]) # Write each IP/Domain from e to destination file.
-fo.close()
-print "[+] Now writing IP to our file '%s'." %(out_file_ip)
-fo = open(out_file_ip, 'w') # Open a file to store our parsed result.
-for item in range(len(list_dst_ip)): # Iterate over our list c.
-    e_ip = list_dst_ip[item] # Store each elements inside a new variable e
-    w = csv.writer(fo, lineterminator="\n") # Using csv function to write each value to a newly definied variable w, which actually writes to previously opened file fo.
-    w.writerow([e_ip]) # Write each IP/Domain from e to destination file.
-fo.close()
-print "[+] Now writing Domain to our file '%s'." %(out_file_domain)
-fo = open(out_file_domain, 'w') # Open a file to store our parsed result.
-for item in range(len(list_dst_domain)): # Iterate over our list c.
-    e_domain = list_dst_domain[item] # Store each elements inside a new variable e
-    w = csv.writer(fo, lineterminator="\n") # Using csv function to write each value to a newly definied variable w, which actually writes to previously opened file fo.
-    w.writerow([e_domain]) # Write each IP/Domain from e to destination file.
-fo.close()
-print "[+] Successfully downloaded IP/Domain list into our file '%s'." %(out_file)
+
+list_dst_ip = [s.encode('utf8') for s in list_dst_ip]
+list_dst_domain = [s.encode('utf8') for s in list_dst_domain]
+
+topn_result_dst_ip = Counter(list_dst_ip).most_common(topn)
+topn_result_dst_domain = Counter(list_dst_domain).most_common(topn)
+
+try:
+    with open(out_file_ip, 'wb') as fo:
+        writer = csv.writer(fo, dialect='excel', delimiter=',')
+        writer.writerow( ( 'DST IP', 'COUNT' ))
+        writer.writerows(topn_result_dst_ip)
+    fo.close()
+except IOError:
+    print "\n"
+    print "X"*80
+    print "[-]Error! Permission denied: '%s'" % out_file_ip
+    print "[-]Please check if you have the write permission for destination directory or file"
+    print "[-]Exiting program......"
+    print "X"*80
+    print "\n"
+    sys.exit()
+print "[+] Successfully written TOP-%s result to file '%s'" % (topn, out_file_ip)
+
+try:
+    with open(out_file_domain, 'wb') as fo:
+        writer = csv.writer(fo, dialect='excel', delimiter=',')
+        writer.writerow( ( 'DST DOMAIN', 'COUNT' ))
+        writer.writerows(topn_result_dst_domain)
+    fo.close()
+except IOError:
+    print "\n"
+    print "X"*80
+    print "[-]Error! Permission denied: '%s'" % out_file_domain
+    print "[-]Please check if you have the write permission for destination directory or file"
+    print "[-]Exiting program......"
+    print "X"*80
+    print "\n"
+    sys.exit()
+print "[+] Successfully written TOP-%s result to file '%s'" % (topn, out_file_domain)
+
+print "[+] All jobs done successful."
 print "[+] Have a nice day!"
 print ""
