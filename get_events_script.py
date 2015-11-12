@@ -9,7 +9,7 @@
 print "[+] Initializing..."
 
 lastline_host = "user.lastline.com" # Required. Your on-premise IP/FQDN.
-key_id = "" # Required. Lastline Sensor licnese key id(not license key). Please click on </> button on WEB GUI to get this id. (E.g., 123456789)
+key_id = "" # Required. Lastline Sensor key id(not license key). Please click on </> button on WEB GUI to get this id. (E.g., 123456789)
 subkey_id = "" # Optional. Lastline Sensor subkey id. Leave it blank if you do not want to filter event based on certain Sensor. (E.g., 1234567890)
 llusername = "" # Required. Lastline web portal username in email format. (E.g., your@username)
 llpassword = "" # Required. Lastline web portal password. (E.g., mypassword)
