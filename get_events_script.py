@@ -1,13 +1,11 @@
 #!/usr/bin/python
-# -*- coding: UTF-8 -*-
+'''
 # Author: Tyler Chen
 # Contact: alphaone.tw@gmail.com or tyler@lastline.com
-#####
+'''
 
 # Core Lastline values
 # Please input all the core Lastline values over here:
-print "[+] Initializing..."
-
 lastline_host = "user.lastline.com" # Required. Your on-premise IP/FQDN.
 key_id = "" # Required. Lastline Sensor key id(not license key). Please click on </> button on WEB GUI to get this id. (E.g., 123456789)
 subkey_id = "" # Optional. Lastline Sensor subkey id. Leave it blank if you do not want to filter event based on certain Sensor. (E.g., 1234567890)
@@ -33,6 +31,8 @@ import csv
 import sys
 import os
 #import logging
+
+print "[+] Initializing %s..." %(sys.argv[0])
 
 # Check if user has provided enough core Lastline values:
 if not key_id or not llusername or not llpassword:
