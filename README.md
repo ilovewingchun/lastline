@@ -85,7 +85,7 @@ This one hard codes all core Lastline values so you can use a crontab to automat
 Example usage:<p>
 <pre><code>
 $> python get_events_script.py
-$> cat block.txt 
+$> cat blacklist.txt 
 156.154.103.3
 202.46.190.131
 178.19.108.142
